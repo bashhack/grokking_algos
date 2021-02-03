@@ -122,19 +122,210 @@
 //!
 //! As a simple example, let's first look at how we might describe the algorithm in pseudo-code:
 //!
-//! // Given a sorted list and an item,
-//! // if the item is in the list - return the item.
-//! //
-//! // Initially, we define a low value of 0 and a high value equal to the list's length minus 1.
-//! //
-//! // Then, `while` we haven't found the element (`low <= high`), we
-//! // check the middle element "our guess" (`(low + high) // 2`) against the following:
-//! //
-//! // - If the guess is equal to the item, return the item.
-//! // - If the guess is not equal to the item,
-//! //       if the guess is greater than the item, reset the high so that `high = mid - 1`
-//! //       if the guess is less than the item, reset the low so that `low = mid + 1`
+//! ```text
+//! Given a sorted list and an item,
+//! if the item is in the list - return the item.
+//!
+//! Initially, we define a low value of 0 and a high value equal to the list's length minus 1.
+//!
+//! Then, `while` we haven't found the element `(low < high)`,
+//! we check the middle element "our guess" `((low + high) / 2)` against the following:
+//!
+//! - If the guess is equal to the item, return the item.
+//! - If the guess is not equal to the item:
+//!       If the guess is greater than the item, reset the high so that `high = mid - 1`.
+//!       If the guess is less than the item, reset the low so that `low = mid + 1`.
+//! ```
 
-// An iterative binary search
-pub fn iterative_binary_search() {
+/// A linear search
+///
+/// Searches for the presence of an item within a list - returning a matching index or None.
+///
+/// Should be expected to have performance characteristics of `O(n)`.
+///
+/// # Arguments
+///
+/// * `list` - A sorted vector of elements
+/// * `item` - An element to search for within the vector
+///
+/// # Examples
+///
+/// ```
+/// let list: Vec<usize> = (0..10).collect();
+/// linear_search(list, 5)
+/// ```
+pub fn linear_search<T: Ord + std::fmt::Debug>(list: &[T], item: T) -> Option<usize> {
+    // A simple iteration over the vector, searching element by element
+    // returning a match or None
+    for (i, val) in list.iter().enumerate() {
+        if *val == item {
+            return Some(i);
+        }
+    }
+    None
+}
+
+/// An iterative binary search
+///
+/// Searches for the presence of an item within a list - returning a matching index or None.
+///
+/// Should be expected to have performance characteristics of `O(log n)`.
+///
+/// # Arguments
+///
+/// * `list` - A sorted vector of elements
+/// * `item` - An element to search for within the vector
+///
+/// # Examples
+///
+/// ```
+/// let list: Vec<usize> = (0..10).collect();
+/// iterative_binary_search(list, 5)
+/// ```
+pub fn iterative_binary_search<T: Ord + std::fmt::Debug>(list: &[T], item: T) -> Option<usize> {
+    // Setting the upper and lower bounds
+    let mut low = 0;
+    let mut high = list.len();
+
+    // So long as our low is less than our high, we proceed
+    while low < high {
+        // Calculate a mid point or pivot point within the collection
+        let mid = (low + high) / 2;
+
+        // Ask if we have found a match for the item within the list, and return if found.
+        //
+        // If we have found no match, but our item value is less than the mid point,
+        // reset high to one less than our current mid point and repeat operations
+        // from the beginning of the `while` loop.
+        //
+        // If we have found no match, but our item value is greater than the mid point,
+        // increase our low to one greater than our current mid point and repeat operations
+        // from the beginning of the `while` loop.
+        if item == list[mid] {
+            return Some(mid);
+        } else if item < list[mid] {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    None
+}
+
+/// A recursive binary search
+///
+/// Searches for the presence of an item within a list - returning a matching index or None.
+///
+/// Should be expected to have performance characteristics of `O(log n)`.
+///
+/// # Arguments
+///
+/// * `list` - A sorted vector of elements
+/// * `item` - An element to search for within the vector
+///
+/// # Examples
+///
+/// ```
+/// let list: Vec<usize> = (0..10).collect();
+/// recursive_binary_search(list, 5)
+/// ```
+pub fn recursive_binary_search<T: Ord + std::fmt::Debug>(
+    list: &[T],
+    item: T,
+    low: usize,
+    high: usize,
+) -> Option<usize> {
+    let mid = (low + high) / 2;
+
+    if list.is_empty() || mid >= list.len() {
+        return None;
+    } else {
+        if item == list[mid] {
+            return Some(mid);
+        }
+
+        if item < list[mid] {
+            recursive_binary_search(list, item, low, mid - 1)
+        } else {
+            recursive_binary_search(list, item, mid + 1, high)
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn linear_search_returns_none_if_empty_vector() {
+        let v: Vec<usize> = Vec::new();
+        assert_eq!(linear_search(&v, 1), None)
+    }
+
+    #[test]
+    fn linear_search_returns_none_if_element_not_found() {
+        let v: Vec<usize> = (0..4).collect();
+        assert_eq!(linear_search(&v, 5), None)
+    }
+
+    #[test]
+    fn linear_search_returns_index_at_vector_start() {
+        let v: Vec<usize> = (0..4).collect();
+        assert_eq!(linear_search(&v, 0), Some(0));
+    }
+
+    #[test]
+    fn linear_search_returns_index_at_vector_end() {
+        let v: Vec<usize> = (0..4).collect();
+        assert_eq!(linear_search(&v, 3), Some(3));
+    }
+
+    #[test]
+    fn iterative_binary_search_returns_none_if_empty_vector() {
+        let v: Vec<usize> = Vec::new();
+        assert_eq!(iterative_binary_search(&v, 1), None)
+    }
+
+    #[test]
+    fn iterative_binary_search_returns_none_if_element_not_found() {
+        let v: Vec<usize> = (0..4).collect();
+        assert_eq!(iterative_binary_search(&v, 5), None)
+    }
+
+    #[test]
+    fn iterative_binary_search_returns_index_at_vector_start() {
+        let v: Vec<usize> = (0..4).collect();
+        assert_eq!(iterative_binary_search(&v, 0), Some(0));
+    }
+
+    #[test]
+    fn iterative_binary_search_returns_index_at_vector_end() {
+        let v: Vec<usize> = (0..4).collect();
+        assert_eq!(iterative_binary_search(&v, 3), Some(3));
+    }
+
+    #[test]
+    fn recursive_binary_search_returns_none_if_empty_vector() {
+        let v: Vec<usize> = Vec::new();
+        assert_eq!(recursive_binary_search(&v, 1, 0, v.len()), None)
+    }
+
+    #[test]
+    fn recursive_binary_search_returns_none_if_element_not_found() {
+        let v: Vec<usize> = (0..4).collect();
+        assert_eq!(recursive_binary_search(&v, 5, 0, v.len()), None)
+    }
+
+    #[test]
+    fn recursive_binary_search_returns_index_at_vector_start() {
+        let v: Vec<usize> = (0..4).collect();
+        assert_eq!(recursive_binary_search(&v, 0, 0, v.len()), Some(0));
+    }
+
+    #[test]
+    fn recursive_binary_search_returns_index_at_vector_end() {
+        let v: Vec<usize> = (0..4).collect();
+        assert_eq!(recursive_binary_search(&v, 3, 0, v.len()), Some(3));
+    }
 }
