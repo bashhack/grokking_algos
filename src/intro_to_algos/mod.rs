@@ -150,7 +150,7 @@
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust
 /// let list: Vec<usize> = (0..10).collect();
 /// linear_search(list, 5)
 /// ```
@@ -178,7 +178,7 @@ pub fn linear_search<T: Ord + std::fmt::Debug>(list: &[T], item: T) -> Option<us
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust
 /// let list: Vec<usize> = (0..10).collect();
 /// iterative_binary_search(list, 5)
 /// ```
@@ -226,7 +226,7 @@ pub fn iterative_binary_search<T: Ord + std::fmt::Debug>(list: &[T], item: T) ->
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust
 /// let list: Vec<usize> = (0..10).collect();
 /// recursive_binary_search(list, 5)
 /// ```
