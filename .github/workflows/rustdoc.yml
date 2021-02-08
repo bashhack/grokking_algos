@@ -36,4 +36,4 @@ jobs:
           github_token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           publish_branch: gh-pages
           publish_dir: ./target/doc
-          force-orphan: true
+          force_orphan: true
