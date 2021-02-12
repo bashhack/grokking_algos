@@ -181,3 +181,24 @@
 //!     Compare this hybrid data structure to arrays and linked lists. Is it slower or faster
 //!     than each for searching and inserting? You don't have to give Big O run times,
 //!     just whether the new data structure would be faster or slower.
+//!
+//!     A. Our hybrid data structure strikes a balance between arrays + linked lists. Arrays
+//!        provide excellent reads over linked lists - so our hybrid structure accelerates
+//!        the initial lookup penalty we'd otherwise expect from a linked list or a list
+//!        of linked lists. Our hybrid data structure also gains the efficiency of
+//!        insertion/deletion as well - a penalty we would have incurred with an array of arrays.
+
+//! # Selection Sort
+//!
+//! We have previously looked at binary search, but we now turn our attention to our first sorting
+//! algorithm: _selection sort_. This novel algorithm is an entry point to a large number of
+//! sorting algorithms, including quicksort and others.
+//!
+//! Do note that if you are after an efficient sorting algorithm, look elsewhere first!
+//!
+//! # Selection Sort in Detail
+//!
+//! As a simple example, let's first look at how we might describe the algorithm in pseudo-code:
+//!
+//! ```text
+//! ```
