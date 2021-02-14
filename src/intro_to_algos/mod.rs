@@ -97,6 +97,8 @@
 //!
 //! Fastest to slowest...
 //!
+//! * O(1) - `constant time` - finding single element in an array
+//!
 //! * O(log n) - `log time` - binary search
 //!
 //! * O(n) - `linear time` - linear search
