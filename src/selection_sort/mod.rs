@@ -198,7 +198,100 @@
 //!
 //! # Selection Sort in Detail
 //!
-//! As a simple example, let's first look at how we might describe the algorithm in pseudo-code:
+//! Let's imagine we are tasked with sorting a list of unordered integers - for this simple
+//! example, let's first look at how we might describe the algorithm in pseudo-code.
 //!
 //! ```text
+//! Given a list of unordered elements, find the smallest element, placing it at the head
+//! of the list. Proceed to find the next min value ahead of just recently placed element.
+//! Repeat this process until the list has been sorted smallest to largest.
 //! ```
+//!
+//! How would we describe the performance characteristics of this algorithm?
+//! We can immediately spot that asking for the min of a list would require us to visit
+//! each element in the list once, meaning we can deduce this operation takes `O(n)` time.
+//! For a list of size `n`, we repeat the search for min (i.e., we could also use max or any
+//! another predicate comparator depending on the nature of the sort logic) `n` times.
+//! In short, we perform `O(n)` `n` times - in other words `O(n * n)` or O(n<sup>2</sup>).
+
+/// A selection sort
+///
+/// Given an unordered list, sorts it from smallest to largest in-place - returns an ordered vector.
+///
+/// Should be expected to have performance characteristics of `O(n * n)`.
+///
+/// # Arguments
+///
+/// * `list` - An unsorted vector of elements
+///
+/// # Examples
+///
+/// ```rust
+/// let mut list = [5, 2, 1, 6, -1];
+/// selection_sort(&mut list)
+/// ```
+pub fn selection_sort<T: Ord>(list: &mut [T]) -> &mut [T] {
+    // Initialize an index counter and store list length
+    let (mut i, len) = (0, list.len());
+
+    // As long as we have a value to iterate, do so
+    while i < len {
+        // Store reference to next element in list as j,
+        // and existing index counter from outer scope as
+        // the current min value
+        let (mut j, mut current_min) = (i + 1, i);
+
+        // Iterate (or scan) ahead across the length of the list
+        while j < len {
+            // Asking whether the element ahead of the previous element
+            // is less than our current smallest (or min) value
+            if list[j] < list[current_min] {
+                // If it is less, reassign our current min value
+                current_min = j;
+            }
+            // Increase j - moving iteration forward
+            j = j + 1;
+        }
+
+        // Swap current index with current min value
+        list.swap(i, current_min);
+        // Increase i - moving iteration forward
+        i = i + 1;
+    }
+    list
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn selection_sort_returns_none_if_provided_empty_list() {
+        let mut v: [&str; 0] = [];
+        assert_eq!(selection_sort(&mut v), [] as [&str; 0])
+    }
+
+    #[test]
+    fn selection_sort_correctly_sort_unordered_list() {
+        let mut v = [2, 1, 3, 0, 4];
+        assert_eq!(selection_sort(&mut v), [0, 1, 2, 3, 4]);
+    }
+
+    #[test]
+    fn selection_sort_returns_existing_ordered_list() {
+        let mut v = [0, 1, 2, 3, 4];
+        assert_eq!(selection_sort(&mut v), [0, 1, 2, 3, 4])
+    }
+
+    #[test]
+    fn selection_sort_handles_repeating_values() {
+        let mut v = [5, 3, 0, 2, 1, 3, 4, 5];
+        assert_eq!(selection_sort(&mut v), [0, 1, 2, 3, 3, 4, 5, 5])
+    }
+
+    #[test]
+    fn selection_sort_works_over_list_of_strings() {
+        let mut v = ["cat", "apple", "zebra", "banana"];
+        assert_eq!(selection_sort(&mut v), ["apple", "banana", "cat", "zebra"])
+    }
+}
