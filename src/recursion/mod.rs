@@ -88,3 +88,39 @@
 //!     // This is the recursive call + the start of the unwinding step
 //!     my_recursive_procedure(my_arg_but_altered_to_ensure_we_will_converge_toward_base_case)
 //! ```
+
+/// A simple recursive countdown
+///
+/// Iterates down from a value until zero is reached - returns zero (`0`)
+///
+/// Should be expected to have performance characteristics of `O(n)`.
+///
+/// # Arguments
+///
+/// None
+///
+/// # Examples
+///
+/// ```rust
+/// simple_recursive_countdown(10)
+/// ```
+pub fn simple_recursive_countdown(i: i32) -> i32 {
+    println!("{}", i);
+    // Our base case
+    if i <= 0 {
+        return i;
+    } else {
+        // Our recursive case
+        simple_recursive_countdown(i - 1)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn noop() {
+        assert_eq!(simple_recursive_countdown(10), 0);
+    }
+}
