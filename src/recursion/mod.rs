@@ -109,18 +109,111 @@ pub fn simple_recursive_countdown(i: i32) -> i32 {
     // Our base case
     if i <= 0 {
         return i;
-    } else {
-        // Our recursive case
-        simple_recursive_countdown(i - 1)
     }
+    // Our recursive case
+    simple_recursive_countdown(i - 1)
 }
+
+/// A greeter
+///
+/// Given a name input - returns a series of greeting phrases
+///
+/// Useful in examing the mechanics of the call stack:
+///
+///
+/// | ----------- | ----------- |
+/// |                           |
+/// | ----------- | ----------- |
+///
+///
+///
+/// | ----------- | ----------- |
+/// |           Greet           |
+/// | ----------- | ----------- |
+/// | Name:       |   Winston   |
+/// | ----------- | ----------- |
+///
+///
+///
+/// | ----------- | ----------- |
+/// |          Greet 2          |
+/// | ----------- | ----------- |
+/// | Name:       |   Winston   |
+/// | ----------- | ----------- |
+/// |           Greet           |
+/// | ----------- | ----------- |
+/// | Name:       |   Winston   |
+/// | ----------- | ----------- |
+///
+///
+///
+/// | ----------- | ----------- |
+/// |            Bye            |
+/// | ----------- | ----------- |
+/// |           Greet           |
+/// | ----------- | ----------- |
+/// | Name:       |   Winston   |
+///
+///
+/// # Arguments
+///
+/// * `name` - a name used when greeting
+///
+/// # Examples
+///
+/// ```rust
+/// greeter("Winston")
+/// ```
+pub fn greeter(name: &str) {
+    println!("hello {}!", name);
+    second_greeter(name);
+    println!("getting ready to say bye...");
+    bye()
+}
+
+fn second_greeter(name: &str) {
+    println!("how are you, {}?", name)
+}
+
+fn bye() {
+    println!("ok bye!")
+}
+
+/// A factorial implementation
+///
+/// Given an integer, attempts to evaluate its factorial - returns a factorial
+///
+/// Should be expected to have performance characteristics of fatorial time: `O(n!)`.
+///
+/// # Arguments
+///
+/// * `i` - an unsigned integer
+///
+/// # Examples
+///
+/// ```rust
+/// factorial(10)
+/// ```
+pub fn factorial(i: u32) -> () {}
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn noop() {
-        assert_eq!(simple_recursive_countdown(10), 0);
+    fn resolves_to_zero_for_positive_input() {
+        assert_eq!(simple_recursive_countdown(10), 0)
+    }
+
+    #[test]
+    fn resolves_to_original_input_for_negative_input() {
+        assert_eq!(simple_recursive_countdown(-10), -10)
+    }
+
+    #[test]
+    fn greets() {
+        // To see output during test suite:
+        // cargo test greets -- --show-output
+        greeter("Churchill")
     }
 }
