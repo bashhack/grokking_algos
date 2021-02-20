@@ -89,6 +89,12 @@
 //!     my_recursive_procedure(my_arg_but_altered_to_ensure_we_will_converge_toward_base_case)
 //! ```
 
+use num_traits::{One, Signed, Zero};
+use std::{
+    io::{Error, ErrorKind},
+    ops::{Mul, Sub},
+};
+
 /// A simple recursive countdown
 ///
 /// Iterates down from a value until zero is reached - returns zero (`0`)
@@ -194,7 +200,20 @@ fn bye() {
 /// ```rust
 /// factorial(10)
 /// ```
-pub fn factorial(i: u32) -> () {}
+pub fn factorial<T: Signed + Copy + PartialEq + PartialOrd + Sub<Output = T> + Mul + One + Zero>(
+    i: T,
+) -> Result<T, Error> {
+    if i.is_negative() {
+        Error::new(
+            ErrorKind::Other,
+            "Cannot calculate the factorial of a negative value.",
+        );
+    } else if i.is_one() {
+        return Ok(T::one());
+    }
+
+    return Ok(factorial(i - T::one()).unwrap() * i);
+}
 
 #[cfg(test)]
 mod tests {
@@ -215,5 +234,17 @@ mod tests {
         // To see output during test suite:
         // cargo test greets -- --show-output
         greeter("Churchill")
+    }
+
+    #[test]
+    fn finds_factorial_for_input() {
+        assert_eq!(factorial(12).unwrap(), 120)
+    }
+
+    #[test]
+    fn find_factorial_for_zero() {
+        let result = factorial(0).map_err(|e| e.kind());
+        let expected = Err(ErrorKind::Other);
+        assert_eq!(expected, result);
     }
 }
