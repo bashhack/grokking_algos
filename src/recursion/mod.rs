@@ -84,16 +84,10 @@
 //!     // This is our base case
 //!     if (length(my_arg) == 0):
 //!         return a_value;
-//!     
+//!
 //!     // This is the recursive call + the start of the unwinding step
 //!     my_recursive_procedure(my_arg_but_altered_to_ensure_we_will_converge_toward_base_case)
 //! ```
-
-use num_traits::{One, Signed, Zero};
-use std::{
-    io::{Error, ErrorKind},
-    ops::{Mul, Sub},
-};
 
 /// A simple recursive countdown
 ///
@@ -200,19 +194,11 @@ fn bye() {
 /// ```rust
 /// factorial(10)
 /// ```
-pub fn factorial<T: Signed + Copy + PartialEq + PartialOrd + Sub<Output = T> + Mul + One + Zero>(
-    i: T,
-) -> Result<T, Error> {
-    if i.is_negative() {
-        Error::new(
-            ErrorKind::Other,
-            "Cannot calculate the factorial of a negative value.",
-        );
-    } else if i.is_one() {
-        return Ok(T::one());
+pub fn factorial(i: u64) -> u64 {
+    match i {
+        0 => 1,
+        _ => factorial(i - 1) * i,
     }
-
-    return Ok(factorial(i - T::one()).unwrap() * i);
 }
 
 #[cfg(test)]
@@ -237,14 +223,22 @@ mod tests {
     }
 
     #[test]
+    fn finds_factorial_for_max_input() {
+        assert_eq!(factorial(20), 2432902008176640000)
+    }
+
+    #[test]
     fn finds_factorial_for_input() {
-        assert_eq!(factorial(12).unwrap(), 120)
+        assert_eq!(factorial(5), 120)
+    }
+
+    #[test]
+    fn finds_factorial_for_one() {
+        assert_eq!(factorial(1), 1)
     }
 
     #[test]
     fn find_factorial_for_zero() {
-        let result = factorial(0).map_err(|e| e.kind());
-        let expected = Err(ErrorKind::Other);
-        assert_eq!(expected, result);
+        assert_eq!(factorial(0), 1);
     }
 }
