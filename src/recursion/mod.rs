@@ -91,34 +91,46 @@
 //!
 //! ## Exercises
 //!
-//! 3.1 Suppose we have call stack that looks like:
+//! 3.1
 //!
-//!     | ----------- | ----------- |
-//!     |          Greet 2          |
-//!     | ----------- | ----------- |
-//!     | Name:       |   Winston   |
-//!     | ----------- | ----------- |
-//!     |           Greet           |
-//!     | ----------- | ----------- |
-//!     | Name:       |   Winston   |
-//!     | ----------- | ----------- |
+//! Suppose we have call stack that looks like:
 //!
-//!     What can say about the current state of the call stack?
+//! ```text
+//! | ----------- | ----------- |
+//! |          Greet 2          |
+//! | ----------- | ----------- |
+//! | Name:       |   Winston   |
+//! | ----------- | ----------- |
+//! |           Greet           |
+//! | ----------- | ----------- |
+//! | Name:       |   Winston   |
+//! | ----------- | ----------- |
+//! ```
 //!
-//!     A. We can determine that there are two functions on the stack: `Greet` and `Greet 2`.
-//!        Each takes at least a single parameter (`name`) having a value of `Winston`.
-//!        Both functions being on the stack would indicate that we in the middle of the
-//!        stack evaluation. Once `Greet 2` is called, we can expect that `Greet` will resume
-//!        its execution.
+//! What can say about the current state of the call stack?
 //!
-//! 3.2 Suppose you accidentally write a recursive function that runs forever. As you
-//!     saw, your computer allocates memory on the stack for each function call.
-//!     What happens to the stack when your recursive function runs forever?
+//! A - 3.1
 //!
-//!     A. Because the stack is a limited resource - we are going to be headed toward a stack overflow!
-//!        This is absolutely not a good error to encounter - in fact, we often classify it as a
-//!        fatal error. Once we detect a stack overflow error, we cannot guarantee the integrity
-//!        of the program state and more often than not, our program has likely crashed completely.
+//! We can determine that there are two functions on the stack: `Greet` and `Greet 2`.
+//! Each takes at least a single parameter (`name`) having a value of `Winston`.
+//! Both functions being on the stack would indicate that we in the middle of the
+//! stack evaluation. Once `Greet 2` is called, we can expect that `Greet` will resume
+//! its execution.
+//!
+//! ---
+//!
+//! 3.2
+//!
+//! Suppose you accidentally write a recursive function that runs forever. As you
+//! saw, your computer allocates memory on the stack for each function call.
+//! What happens to the stack when your recursive function runs forever?
+//!
+//! A - 3.2
+//!
+//! Because the stack is a limited resource - we are going to be headed toward a stack overflow!
+//! This is absolutely not a good error to encounter - in fact, we often classify it as a
+//! fatal error. Once we detect a stack overflow error, we cannot guarantee the integrity
+//! of the program state and more often than not, our program has likely crashed completely.
 
 /// A simple recursive countdown
 ///
@@ -152,6 +164,7 @@ pub fn simple_recursive_countdown(i: i32) -> i32 {
 /// Useful in examing the mechanics of the call stack:
 ///
 ///
+/// ```text
 /// | ----------- | ----------- |
 /// |                           |
 /// | ----------- | ----------- |
@@ -184,6 +197,7 @@ pub fn simple_recursive_countdown(i: i32) -> i32 {
 /// |           Greet           |
 /// | ----------- | ----------- |
 /// | Name:       |   Winston   |
+/// ```
 ///
 ///
 /// # Arguments
@@ -202,10 +216,12 @@ pub fn greeter(name: &str) {
     bye()
 }
 
+#[doc(hidden)]
 fn second_greeter(name: &str) {
     println!("how are you, {}?", name)
 }
 
+#[doc(hidden)]
 fn bye() {
     println!("ok bye!")
 }
