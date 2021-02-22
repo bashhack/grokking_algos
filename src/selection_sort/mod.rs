@@ -123,70 +123,98 @@
 //!
 //! ## Exercises
 //!
-//! 2.1 Suppose you're building an app to keep track of your finances. Every day, you write
-//!     down everything you spent money on. At the end of the month, you review your expenses
-//!     and sum up how much you spent. So, you have lots of inserts and a few reads. Should
-//!     you use an array or a list?
+//! 2.1
 //!
-//!     A. If we have more inserts than reads, we would be wise to leverage lists. We are
-//!        in luck for the read requirement as well - our problem statement involves a summing
-//!        operation which we could deem sequential reads (as opposed to "random access" reads).
-//!        Sequential reads for linked lists can be quite performant, so a linked lists
-//!        would be an appropriate structure.
+//! Suppose you're building an app to keep track of your finances. Every day, you write
+//! down everything you spent money on. At the end of the month, you review your expenses
+//! and sum up how much you spent. So, you have lots of inserts and a few reads. Should
+//! you use an array or a list?
 //!
-//! 2.2 Suppose you're building an app for restaurants to take customer orders. Your app needs
-//!     to store a list of orders. Servers keep adding orders to this list, and chefs take orders
-//!     off the list and make them. It's an order queue: servers add orders to the back of the
-//!     queue, and the chef takes the first order off the queue and cooks it. Would you use an
-//!     array or a linked list to implement this queue?
+//! A - 2.1
 //!
-//!     A. Again, a linked list here is ideal - there's no random access reads necessary, as we're
-//!        dealing with a simple "first in first-out (FIFO)" lookup strategy. These insertion
-//!        and deletion actions on the queue favor the constant time characteristics provided
-//!        by a linked list's innate tendency to track its first and last elements.
+//! If we have more inserts than reads, we would be wise to leverage lists. We are
+//! in luck for the read requirement as well - our problem statement involves a summing
+//! operation which we could deem sequential reads (as opposed to "random access" reads).
+//! Sequential reads for linked lists can be quite performant, so a linked lists
+//! would be an appropriate structure.
 //!
-//! 2.3 Suppose Facebook keeps a list of usernames. When someone tries to log in to Facebook,
-//!     a search is done for their username. If their name is in the list of usernames,
-//!     they can log in. People log in to Facebook pretty often, so there are a lot of searches
-//!     through this list of usernames. Suppose Facebook uses binary search to search the list.
-//!     Binary search needs random access - you need to be able to get to the middle of the list
-//!     of usernames instantly. Knowing this, would you implement the list as an array or a linked
-//!     list?
+//! ---
 //!
-//!     A. _you need to be able to get to the middle of the list of usernames instantly_ is our
-//!        cue that we need an array - preferably sorted, as our binary search algorithm
-//!        requires it!
+//! 2.2
 //!
-//! 2.4 People sign up for Facebook pretty often, too. Suppose you decided to use an array to
-//!     store the list of users. What are the downsides of an array for inserts? In particular,
-//!     suppose you're using binary search to search for logins. What happens when you add new
-//!     users to an array?
+//! Suppose you're building an app for restaurants to take customer orders. Your app needs
+//! to store a list of orders. Servers keep adding orders to this list, and chefs take orders
+//! off the list and make them. It's an order queue: servers add orders to the back of the
+//! queue, and the chef takes the first order off the queue and cooks it. Would you use an
+//! array or a linked list to implement this queue?
 //!
-//!     A. The biggest downside is the potential for memory reallocation. This could incur
-//!        a performance overhead in and of itself, but should we have exhausted available space
-//!        in memory, we might even risk out of memory errors. This is to say nothing of
-//!        the need to insure the inserted element is then sorted into its proper position.
+//! A - 2.2
 //!
-//! 2.5 In reality, Facebook uses neither an array nor a linked list to store user information.
-//!     Let's consider a hybrid data structure: an array of linked lists. You have an array with
-//!     26 slots. Each slot points to a linked list. For example, the first slot in the array
-//!     points to a linked list containing all the usernames starting with `a`. The second slot
-//!     points to a linked list containing all the usernames starting with `b`, and so on.
+//! Again, a linked list here is ideal - there's no random access reads necessary, as we're
+//! dealing with a simple "first in first-out (FIFO)" lookup strategy. These insertion
+//! and deletion actions on the queue favor the constant time characteristics provided
+//! by a linked list's innate tendency to track its first and last elements.
 //!
-//!     Suppose Adit B signs up for Facebook, and you want to add them to the list. You go to
-//!     slot 1 in the array, go to the linked list for slot 1, and add Adit B at the end. Now,
-//!     suppose you want to search for Zakhir H. You go to slot 26, which points to a linked list
-//!     of all the Z names. Then you search through that list to find Zakhir H.
+//! ---
 //!
-//!     Compare this hybrid data structure to arrays and linked lists. Is it slower or faster
-//!     than each for searching and inserting? You don't have to give Big O run times,
-//!     just whether the new data structure would be faster or slower.
+//! 2.3
 //!
-//!     A. Our hybrid data structure strikes a balance between arrays + linked lists. Arrays
-//!        provide excellent reads over linked lists - so our hybrid structure accelerates
-//!        the initial lookup penalty we'd otherwise expect from a linked list or a list
-//!        of linked lists. Our hybrid data structure also gains the efficiency of
-//!        insertion/deletion as well - a penalty we would have incurred with an array of arrays.
+//! Suppose Facebook keeps a list of usernames. When someone tries to log in to Facebook,
+//! a search is done for their username. If their name is in the list of usernames,
+//! they can log in. People log in to Facebook pretty often, so there are a lot of searches
+//! through this list of usernames. Suppose Facebook uses binary search to search the list.
+//! Binary search needs random access - you need to be able to get to the middle of the list
+//! of usernames instantly. Knowing this, would you implement the list as an array or a linked
+//! list?
+//!
+//! A - 2.3
+//!
+//! _you need to be able to get to the middle of the list of usernames instantly_ is our
+//! cue that we need an array - preferably sorted, as our binary search algorithm
+//! requires it!
+//!
+//! ---
+//!
+//! 2.4
+//!
+//! People sign up for Facebook pretty often, too. Suppose you decided to use an array to
+//! store the list of users. What are the downsides of an array for inserts? In particular,
+//! suppose you're using binary search to search for logins. What happens when you add new
+//! users to an array?
+//!
+//! A - 2.4
+//!
+//! The biggest downside is the potential for memory reallocation. This could incur
+//! a performance overhead in and of itself, but should we have exhausted available space
+//! in memory, we might even risk out of memory errors. This is to say nothing of
+//! the need to insure the inserted element is then sorted into its proper position.
+//!
+//! ---
+//!
+//! 2.5
+//!
+//! In reality, Facebook uses neither an array nor a linked list to store user information.
+//! Let's consider a hybrid data structure: an array of linked lists. You have an array with
+//! 26 slots. Each slot points to a linked list. For example, the first slot in the array
+//! points to a linked list containing all the usernames starting with `a`. The second slot
+//! points to a linked list containing all the usernames starting with `b`, and so on.
+//!
+//! Suppose Adit B signs up for Facebook, and you want to add them to the list. You go to
+//! slot 1 in the array, go to the linked list for slot 1, and add Adit B at the end. Now,
+//! suppose you want to search for Zakhir H. You go to slot 26, which points to a linked list
+//! of all the Z names. Then you search through that list to find Zakhir H.
+//!
+//! Compare this hybrid data structure to arrays and linked lists. Is it slower or faster
+//! than each for searching and inserting? You don't have to give Big O run times,
+//! just whether the new data structure would be faster or slower.
+//!
+//! A - 2.5
+//!
+//! Our hybrid data structure strikes a balance between arrays + linked lists. Arrays
+//! provide excellent reads over linked lists - so our hybrid structure accelerates
+//! the initial lookup penalty we'd otherwise expect from a linked list or a list
+//! of linked lists. Our hybrid data structure also gains the efficiency of
+//! insertion/deletion as well - a penalty we would have incurred with an array of arrays.
 
 //! # Selection Sort
 //!
