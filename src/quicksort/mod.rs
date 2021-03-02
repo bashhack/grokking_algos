@@ -75,6 +75,29 @@ pub fn sum(list: &[u64]) -> u64 {
     }
 }
 
+/// A count implementation
+///
+/// Given an array, evaluates the count of elements - returns an unsigned integer
+///
+/// Should be expected to have performance characteristics of `O(n)`.
+///
+/// # Arguments
+///
+/// * `list` - a list of elements (can be empty list)
+///
+/// # Examples
+///
+/// ```rust
+/// let v: Vec<u64 = (0..5).collect();
+/// count(&v)
+/// ```
+pub fn count<T: std::fmt::Debug>(list: &[T]) -> u64 {
+    match list.is_empty() {
+        true => 0,
+        _ => 1 + count(&list[1..]),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -92,10 +115,30 @@ mod tests {
     }
 
     #[test]
-    fn sum_of_non_empty_list_returns_matching_value_to_builtin_sum() {
+    fn sum_of_non_empty_list_returns_value_equal_to_builtin_sum() {
         let v: Vec<u64> = (0..5).collect();
         let sum_of_v = sum(&v);
         let builtin_sum_of_v = v.iter().sum();
         assert_eq!(sum_of_v, builtin_sum_of_v);
+    }
+
+    #[test]
+    fn count_of_empty_list_returns_zero() {
+        let v: Vec<u64> = Vec::new();
+        assert_eq!(count(&v), 0)
+    }
+
+    #[test]
+    fn count_of_non_empty_list_returns_non_zero_count_value() {
+        let v: Vec<u64> = (0..5).collect();
+        assert_eq!(count(&v), 5);
+    }
+
+    #[test]
+    fn count_of_non_empty_list_returns_value_equal_to_builtin_len() {
+        let v: Vec<u64> = (0..5).collect();
+        let count_of_v = count(&v);
+        let builtin_count_of_v = v.len() as u64;
+        assert_eq!(count_of_v, builtin_count_of_v);
     }
 }
