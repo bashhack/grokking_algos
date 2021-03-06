@@ -43,14 +43,47 @@
 //!
 //! ## Exercises
 //!
-//! 4.1 Write out the code for the `sum` function
+//! 4.1
 //!
-//! 4.2 Write a recursive function to count the number of items in a list
+//! Write out the code for the `sum` function
 //!
-//! 4.3 Find the maximum number in a list
+//! A - 4.1
 //!
-//! 4.4 Remembering binary search - it's a divide and conquer algorithm, too. Can
-//!     you come up with the base case and recursive case for binary search?
+//! Hello world
+//!
+//! ---
+//!
+//! 4.2
+//!
+//! Write a recursive function to count the number of items in a list
+//!
+//! A - 4.2
+//!
+//! Hello world 2
+//!
+//! ---
+//!
+//! 4.3
+//!
+//! Find the maximum number in a list
+//!
+//! A - 4.3
+//!
+//! Hello world 3
+//!
+//! ---
+//!
+//! 4.4
+//!
+//! Remembering binary search - it's a divide and conquer algorithm, too. Can
+//! you come up with the base case and recursive case for binary search?
+//!
+//! A - 4.4
+//!
+//! [recursive_binary_search](../intro_to_algos/fn.recursive_binary_search.html)
+//!
+
+use std::cmp::max;
 
 /// A sum implementation
 ///
@@ -98,6 +131,59 @@ pub fn count<T: std::fmt::Debug>(list: &[T]) -> u64 {
     }
 }
 
+/// A max implementation
+///
+/// Given an array, finds its max value - returns either the max value or None.
+///
+/// Should be expected to have performance characteristics of `O(n)`.
+///
+/// # Arguments
+///
+/// * `list` - a list of elements (can be empty list)
+/// * `index` - an index used to instantiate recursive case
+///
+/// # Examples
+///
+/// ```rust
+/// let v: Vec<u64 = (0..5).collect();
+/// _find_max(&v, v.len() - 1)
+/// ```
+pub fn _find_max<T: Ord + Copy>(list: &[T], index: usize) -> Option<&T> {
+    match list.is_empty() {
+        true => None,
+        _ => Some(max(
+            &list[0],
+            _find_max(&list[1..], index.checked_sub(1).unwrap_or(list.len() - 1))
+                .unwrap_or(&list[0]),
+        )),
+    }
+}
+
+/// A function wrapper for [_find_max](../quicksort/fn._find_max.html)
+///
+/// Because Rust does not have a great way to handle optional arguments -
+/// with Option, Enum, and function wrappers as alternatives - this
+/// function serves to encapsulate the initial call to `_find_max`
+/// in order to instantiate its parameter `index`.
+///
+///
+/// Should be expected to have performance characteristics of `O(n)`.
+///
+/// # Arguments
+///
+/// * `list` - a list of elements (can be empty list)
+///
+/// # Examples
+///
+/// ```rust
+/// let v: Vec<u64 = (0..5).collect();
+/// find_max(&v)
+/// ```
+pub fn find_max<T: Ord + Copy>(list: &[T]) -> Option<&T> {
+    let index = list.len().checked_sub(1).unwrap_or(0);
+    _find_max(&list, index)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -140,5 +226,43 @@ mod tests {
         let count_of_v = count(&v);
         let builtin_count_of_v = v.len() as u64;
         assert_eq!(count_of_v, builtin_count_of_v);
+    }
+
+    #[test]
+    fn max_of_empty_list_returns_none() {
+        let v: Vec<u64> = Vec::new();
+        assert_eq!(find_max(&v), None)
+    }
+
+    #[test]
+    fn max_of_list_returns_expected_value() {
+        let v: Vec<u64> = vec![0, 25, 4, 2, 10, 1, 20];
+        assert_eq!(find_max(&v), Some(&25))
+    }
+
+    #[test]
+    fn max_of_list_with_negative_values_returns_expected_value() {
+        let v: Vec<i64> = vec![0, 25, -4, -2, 10, 1, 20];
+        assert_eq!(find_max(&v), Some(&25))
+    }
+
+    #[test]
+    fn max_of_list_with_single_value_returns_expected_value() {
+        let v: Vec<i64> = vec![3];
+        assert_eq!(find_max(&v), Some(&3))
+    }
+
+    #[test]
+    fn max_of_empty_list_returns_value_equal_to_builtin_max() {
+        let v: Vec<u64> = Vec::new();
+        let builtin_max = v.iter().max();
+        assert_eq!(builtin_max, find_max(&v))
+    }
+
+    #[test]
+    fn max_of_list_returns_value_equal_to_builtin_max() {
+        let v: Vec<u64> = vec![0, 25, 4, 2, 10, 1, 20];
+        let builtin_max = v.iter().max();
+        assert_eq!(builtin_max, find_max(&v))
     }
 }
