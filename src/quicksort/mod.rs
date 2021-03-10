@@ -41,7 +41,7 @@
 //! to the first value in the array plus the sum of the rest of the array.
 //! ```
 //!
-//! ## Exercises
+//! ## Continued Exercises
 //!
 //! 4.1
 //!
@@ -80,10 +80,124 @@
 //!
 //! A - 4.4
 //!
-//! [recursive_binary_search](../intro_to_algos/fn.recursive_binary_search.html)
+//! See: [recursive_binary_search](../intro_to_algos/fn.recursive_binary_search.html)
 //!
+//! # Intro to Quicksort
+//!
+//! Like [selection_sort](../selection_sort/fn.selection-sort.html) before it,
+//! Quicksort is common and simple sorting algorithm. Its advantage over the former
+//! is in its speed - it is a faster algorithm than selection, having an expected
+//! runtime performance of `O(n log n)`. In fitting with the theme of this module,
+//! it is also a divide and conquer algorithm.
+//!
+//! # Quicksort in Detail
+//!
+//! ```text
+//! Given an array of elements, while there are elements, iterate over the elements.
+//! If there is a value at the moment of iteration, let this the pivot element.
+//! Partition the array of elements, into two sub-arrays
+//! (elements less than the pivot and elements greater than the pivot, respectively).
+//! Then, call Quicksort recursively on each of the two sub-arrays.
+//! Finally, combined the sorted sub-arrays on either side of the pivot element and return.
+//! ```
+//!
+//! ## Perils of the Pivot
+//!
+//! We have described Quicksort as an algorithm that can be expected to have the
+//! performance characteristics of `O(n log n)` - but, crucially, this is only in the
+//! average case. Selection sort, as we saw previously, had a Big O of `O(n * n)`.
+//! As it happens this is also the worst case performance for Quicksort, as well.
+//!
+//! Interestingly, Quicksort's neighboring sort algorithm: merge sort is actually consistenly
+//! `O(n log n)`. The question then is why not just use merge sort over Quicksort
+//! all the time?
+//!
+//! The answer lies in the value of the Big O constant values between them. Merge sort
+//! has a larger constant value than quicksort, making it slower in practice than Quicksort.
+//! Additionally, quicksort is generally faster than merge sort in practice because
+//! it will tend to perform in the average case more often than the worst case.
+//!
+//! But what consitutes the worst case, anyway? The pivot element in Quicksort bears
+//! heavy impact on its performance. Thankfully the worst-case is not as frequently
+//! encountered in practice, but let's imagine that we have picked the first element
+//! in the list as our pivot element (on a related note, most implementations of the
+//! algorithm choose either the first or last). Now, let's also imagine we have a sorted
+//! list. Because the Quicksort algorithm eagerly begins its execution without checking
+//! if the list is sorted, we will still attempt to sort the sorted list.
+//!
+//! When this occurs, we will have a longer call stack compared to a middle-point pivot
+//! against that same sorted list:
+//!
+//! ```text
+//! [1] [2] [3] [4] [5] [6] [7] [8]
+//!
+//! // NOTE: We pick the first element as the pivot every time
+//! [ ] <1> [2] [3] [4] [5] [6] [7] [8]
+//!         [ ] <2> [3] [4] [5] [6] [7] [8]
+//!             [ ] <3> [4] [5] [6] [7] [8]
+//!                 [ ] <4> [5] [6] [7] [8]
+//!                     [ ] <5> [6] [7] [8]
+//!                         [ ] <6> [7] [8]
+//!                             [ ] [7] [8]
+//! ```
+//!
+//! Compare this with a middle-point pivot against that same sorted list:
+//!
+//! ```text
+//! [1] [2] [3] [4] [5] [6] [7] [8]
+//!
+//! [1] [2] [3] <4> [5] [6] [7] [8]
+//! [1] <2> [3]         <6> [7] [8]
+//!                     [ ] <7> [8]
+//! ```
+//!
+//! In the first case, we have the worst case runtime and in the second we have
+//! the best-case. In other words, the stack size of the first is `O(n)` and the second is `O(log n)`.
+//! For both, the time at each level is `O(n)`. Extrapolating this stack size by level time,
+//! we have Big O of `O(n * n)` and `O(n log n)`, respectively.
+//!
+//! ## Exercises
+//!
+//! 4.5
+//!
+//! Printing the value of each element in an array.
+//!
+//! A - 4.5
+//!
+//! `O(n)`
+//!
+//! ---
+//!
+//! 4.6
+//!
+//! Doubling the value of each element in an array.
+//!
+//! A - 4.6
+//!
+//! Also, `O(n)`.
+//!
+//! ---
+//!
+//! 4.7
+//!
+//! Doubling the value of just the first element in an array.
+//!
+//! A - 4.7
+//!
+//! `O(1)`
+//!
+//! ---
+//!
+//! 4.8
+//!
+//! Creating a multiplication table with all the elements in the array. So if your array is [2, 3, 7, 8, 10],
+//! you first multiply every element by 2, then multiply every element by 3, then by 7, and so on.
+//!
+//! A - 4.8
+//!
+//! `O(n * n)` or O(n<sup>2</sup>)
 
-use std::cmp::max;
+use std::{cmp::max, iter::once};
 
 /// A sum implementation
 ///
@@ -98,7 +212,7 @@ use std::cmp::max;
 /// # Examples
 ///
 /// ```rust
-/// let v: Vec<u64 = (0..5).collect();
+/// let v: Vec<u64> = (0..5).collect();
 /// sum(&v)
 /// ```
 pub fn sum(list: &[u64]) -> u64 {
@@ -121,7 +235,7 @@ pub fn sum(list: &[u64]) -> u64 {
 /// # Examples
 ///
 /// ```rust
-/// let v: Vec<u64 = (0..5).collect();
+/// let v: Vec<u64> = (0..5).collect();
 /// count(&v)
 /// ```
 pub fn count<T: std::fmt::Debug>(list: &[T]) -> u64 {
@@ -145,7 +259,7 @@ pub fn count<T: std::fmt::Debug>(list: &[T]) -> u64 {
 /// # Examples
 ///
 /// ```rust
-/// let v: Vec<u64 = (0..5).collect();
+/// let v: Vec<u64> = (0..5).collect();
 /// _find_max(&v, v.len() - 1)
 /// ```
 pub fn _find_max<T: Ord + Copy>(list: &[T], index: usize) -> Option<&T> {
@@ -166,6 +280,8 @@ pub fn _find_max<T: Ord + Copy>(list: &[T], index: usize) -> Option<&T> {
 /// function serves to encapsulate the initial call to `_find_max`
 /// in order to instantiate its parameter `index`.
 ///
+/// Returns either the max value of the list or None.
+///
 ///
 /// Should be expected to have performance characteristics of `O(n)`.
 ///
@@ -176,12 +292,61 @@ pub fn _find_max<T: Ord + Copy>(list: &[T], index: usize) -> Option<&T> {
 /// # Examples
 ///
 /// ```rust
-/// let v: Vec<u64 = (0..5).collect();
+/// let v: Vec<u64> = (0..5).collect();
 /// find_max(&v)
 /// ```
 pub fn find_max<T: Ord + Copy>(list: &[T]) -> Option<&T> {
     let index = list.len().checked_sub(1).unwrap_or(0);
     _find_max(&list, index)
+}
+
+/// A quicksort implementation
+///
+/// Given a list, sorts the elements therein - returns a sorted list.
+///
+/// Should be expected to have average performance characteristics of `O(n log n)`.
+/// But in the worst case, quicksort may be `O(n * n)` or O(n<sup>2</sup>).
+///
+/// # Arguments
+///
+/// * `list` - a list of elements (can be empty list)
+///
+/// # Examples
+///
+/// ```rust
+/// let v: Vec<u64> = vec![2, 0, 3, 4, 5, 1];
+/// quick_sort(v.clone().into_iter())
+/// ```
+pub fn quick_sort<T, E>(mut list: T) -> Vec<E>
+where
+    T: Iterator<Item = E>,
+    E: PartialOrd,
+{
+    // Given an array of elements,
+    // while there are elements, iterate over the elements.
+    match list.next() {
+        None => Vec::new(),
+
+        // If there is a value at the moment of iteration,
+        // let this the pivot element.
+        Some(pivot) => {
+            // Partition the array of elements, into two sub-arrays
+            // (elements less than the pivot and elements greater than the pivot, respectively).
+            let (list_of_smaller, list_of_greater): (Vec<_>, Vec<_>) =
+                list.partition(|n| n < &pivot);
+
+            // Then, call quicksort recursively on each of the two sub-arrays.
+            let sorted_small = quick_sort(list_of_smaller.into_iter());
+            let sorted_greater = quick_sort(list_of_greater.into_iter());
+
+            // Finally, combined the sorted sub-arrays on either side of the pivot element and return.
+            sorted_small
+                .into_iter()
+                .chain(once(pivot))
+                .chain(sorted_greater.into_iter())
+                .collect()
+        }
+    }
 }
 
 #[cfg(test)]
@@ -264,5 +429,47 @@ mod tests {
         let v: Vec<u64> = vec![0, 25, 4, 2, 10, 1, 20];
         let builtin_max = v.iter().max();
         assert_eq!(builtin_max, find_max(&v))
+    }
+
+    #[test]
+    fn quick_sort_of_empty_list() {
+        let v: Vec<u64> = Vec::new();
+        assert_eq!(quick_sort(v.clone().into_iter()), v)
+    }
+
+    #[test]
+    fn quick_sort_of_one_element_list() {
+        let v: Vec<u64> = vec![1];
+        assert_eq!(quick_sort(v.clone().into_iter()), v)
+    }
+
+    #[test]
+    fn quick_sort_of_four_element_list() {
+        let v: Vec<u64> = vec![2, 1, 4, 0, 3, 5];
+        assert_eq!(quick_sort(v.clone().into_iter()), vec![0, 1, 2, 3, 4, 5])
+    }
+
+    #[test]
+    fn quick_sort_of_four_element_list_with_negative_values() {
+        let v: Vec<i64> = vec![2, 1, 4, 0, 3, -5];
+        assert_eq!(quick_sort(v.clone().into_iter()), vec![-5, 0, 1, 2, 3, 4])
+    }
+
+    #[test]
+    fn quick_sort_of_four_element_list_with_str_values() {
+        let v: Vec<&str> = vec!["mangoes", "apple", "apples", "bananas"];
+        assert_eq!(
+            quick_sort(v.clone().into_iter()),
+            vec!["apple", "apples", "bananas", "mangoes"]
+        )
+    }
+
+    #[test]
+    fn quick_sort_of_repeated_values() {
+        let v: Vec<u64> = vec![5, 2, 4, 1, 0, 1, 3, 4];
+        assert_eq!(
+            quick_sort(v.clone().into_iter()),
+            vec![0, 1, 1, 2, 3, 4, 4, 5]
+        )
     }
 }

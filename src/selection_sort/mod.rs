@@ -260,17 +260,17 @@
 /// ```
 pub fn selection_sort<T: Ord>(list: &mut [T]) -> &mut [T] {
     // Initialize an index counter and store list length
-    let (mut i, len) = (0, list.len());
+    let (mut i, list_len) = (0, list.len());
 
     // As long as we have a value to iterate, do so
-    while i < len {
+    while i < list_len {
         // Store reference to next element in list as j,
         // and existing index counter from outer scope as
         // the current min value
         let (mut j, mut current_min) = (i + 1, i);
 
         // Iterate (or scan) ahead across the length of the list
-        while j < len {
+        while j < list_len {
             // Asking whether the element ahead of the previous element
             // is less than our current smallest (or min) value
             if list[j] < list[current_min] {
