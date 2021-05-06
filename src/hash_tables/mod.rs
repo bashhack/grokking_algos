@@ -30,8 +30,11 @@
 //!
 //! Let's start with a simple array structure:
 //!
+//! ```text
 //! [ ][ ][ ][ ][ ]
+//!
 //!  0  1  2  3  4
+//! ```
 //!
 //! Our hash table values will occupy indicies within the array after having first passed
 //! through a hashing process. Let's walk through the steps:
@@ -44,29 +47,40 @@
 //! will provide us with the index we should use to store our value of `1`. Our hash function
 //! takes in `foo` and returns an index of `3` - in turn, we store `1` at index `3`.
 //!
+//! ```text
 //! [ ][ ][ ][1][ ]
+//!
 //!  0  1  2  3  4
+//! ```
 //!
 //!  Next, we want to store `bar` - it too passes through our hashing function at which point we
 //!  receive a return value of `0`. So, again, we store our value `2` at the index provided to us.
 //!
+//! ```text
 //! [2][ ][ ][1][ ]
+//!
 //!  0  1  2  3  4
+//! ```
 //!
 //!  This process repeats until all values have been stored:
 //!
+//! ```text
 //! [2][4][3][1][5]
+//!
 //!  0  1  2  3  4
+//! ```
 //!
 //!  But - how do we get items out of the hash array? We don't have to search for it iteratively.
 //!  Instead, we can simply ask 'please fetch me value `foo`'.
 //!
+//! ```text
 //!             ____________________
 //!
 //!             |                  |
 //!  `foo` ===> |   hash function  | ===> 3 (index)
 //!             |                  |
 //!             ____________________
+//! ```
 //!
 //! That's right - we simply pass the value requested back to the hash function! The hash function
 //! will return the same value it provided when we leveraged it prior to storage. This, again, is
