@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `intro_to_algos` mod in crate `grokking_algos`."><meta name="keywords" content="rust, rustlang, rust-lang, intro_to_algos"><title>grokking_algos::intro_to_algos - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../grokking_algos/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><p class="location">Module intro_to_algos</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../index.html">grokking_algos</a></p><div id="sidebar-vars" data-name="intro_to_algos" data-ty="mod" data-relpath="../"></div><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">grokking_algos</a>::<wbr><a class="mod" href="">intro_to_algos</a></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/grokking_algos/intro_to_algos/mod.rs.html#1-333" title="goto source code">[src]</a></span></h1><div class="docblock"><p>Intro to Algorithms</p>
+<p><code>intro_to_algos</code> is a module that serves to introduce the foundational
+concepts and modes of analysis that will ground future algorithmic
+study.</p>
+<h1 id="definitions" class="section-header"><a href="#definitions">Definitions</a></h1>
+<p><code>algorithm</code> - a set of instructions to accomplish a given task</p>
+<h1 id="context" class="section-header"><a href="#context">Context</a></h1>
+<p>These instructions may take the form of the familiar - Dijkstra's algorithm,
+Binary Search, N Queen Problem, etc - or it may be almost any block of
+code.</p>
+<p>In any case, an algorithm is a set of finite instructions acting upon
+a set of inputs to produce output (that may sometimes include returning <code>None</code>).</p>
+<p>How an algorithm behaves for a given set of inputs is captured
+in the work of algorithmic analysis. Specifically, we'll often refer
+to 'how fast' an algorithm is by studying the vectors of time + space.
+That is, how long will this algorithm execute and what spatial
+resources (i.e., memory, disk spaces, etc.) are required for its execution.</p>
+<h1 id="big-o-notation" class="section-header"><a href="#big-o-notation">Big O Notation</a></h1>
+<p>When we ask about the speed of an algorithm, we commonly use a form
+of special notation known as <code>Big O Notation</code>.</p>
+<p>In short, it's a convenient way for us to speak in a shared
+language of sorts - so that no matter the algorithm, no matter its
+author, and no matter the language or domain in which it has been
+implemented - we can understand the expected performance.</p>
+<p>But is that the expected performance in the ideal case? No!</p>
+<p>It is important to remember that Big O notation is intended to capture
+the worst-case run time. While this might seem like a negative - we
+can in fact find comfort in knowing that upper-bound, as we can't
+encounter something slower.</p>
+<p>Enough of this introduction - how can we start to comprehend Big O?</p>
+<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<p>A common classification of algorithms for dipping one's toes into
+Big O notation is the time-honored search algorithms. These include
+linear search, binary search, jump search, and many others.</p>
+<p>The variance between these algorithms can be significant! Let's take a look:</p>
+<p>Imagine for a moment we have a simple vector of <code>N=100</code> elements allocated on the 'heap':</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, ... <span class="number">100</span>];</pre></div>
+<p>If we use linear search, for example, and we have a minimum lookup of 1ms per element,
+we know we can expect a 100ms time to run. Why is that? Because in linear search
+we will visit at most every element in sequence.</p>
+<p>Now, let's imagine we use binary search instead. Here, we now have something far more efficient</p>
+<ul>
+<li>on the order of maybe 7ms. In this example, this is because we have only visited
+at most seven (7) elements. We can think about this in logarithmic terms as log<sub>2</sub>100.
+As a refresher - 7 here serves an approximate value for '2 raised to what power is equal to 100'.</li>
+</ul>
+<p>Quite the difference, right? How does this scale as our <code>N</code> grows? What happens when we have
+<code>N=1000000000</code>?</p>
+<p>For such a large input, we can guess that binary search would yield around
+30ms (log<sub>2</sub>1000000000 is approximately 30). Again, in contrast, a linear
+search would have yielded a staggering 11+ days (1000000000 x .001 seconds)!</p>
+<p>This drastic difference illustrates an important truth: the run times of these (and many)
+algorithms grow at vastly different rates depending on their input.</p>
+<p>Had we simply assumed that our results at <code>N=100</code> (linear: 100ms / binary: 7ms = ~14x faster in
+the binary search case) held true for <code>N=1000000000</code> (linear: Xms / binary: 30ms) we could
+have erroneously thought 30ms x ~14 = 420ms was a reasonable run time in the linear case and
+been met with an unpleasant surprise over a week later when our algorithm actually finished.</p>
+<p>This example is a small indication of the importance of understanding how our
+algorithms run, but knowing that as the size of our inputs scales. Big O notation
+can help us express the exact phenomenon we've investigated! After all,
+it serves to help us conceptualize the operations required for an algorithm to execute -
+this in turn can help us visualize the time + space requirements.</p>
+<p>Returning to the linear search example, for some vector of size <code>N</code> we know
+we will visit - in the worst case - every element. We say then that the run time in Big O is
+O(n) where <code>n</code> is the number of operations.</p>
+<p>We saw that binary search was a logarithmic reduction of operations, so we might express its
+complexity as O(log n).</p>
+<h2 id="common-big-o-run-times" class="section-header"><a href="#common-big-o-run-times">Common Big O run times</a></h2>
+<p>Fastest to slowest...</p>
+<ul>
+<li>
+<p>O(1) - <code>constant time</code> - finding single element in an array</p>
+</li>
+<li>
+<p>O(log n) - <code>log time</code> - binary search</p>
+</li>
+<li>
+<p>O(n) - <code>linear time</code> - linear search</p>
+</li>
+<li>
+<p>O(n * log n) - typical fast sort algorithm - quicksort</p>
+</li>
+<li>
+<p>O(n<sup>2</sup>) - typical slow sort algorithm - selection sort</p>
+</li>
+<li>
+<p>O(n!) - very slow <code>factorial time</code> algorithm - traveling salesperson</p>
+</li>
+</ul>
+<h1 id="exercises" class="section-header"><a href="#exercises">Exercises</a></h1>
+<p>1.3 You have a name, and you want to find the person's phone number in the phone book.
+A: O(log n)
+1.4 You have a phone number, and you want to find the person's name in the phone book.
+A: O(n)
+1.5 You want to read the numbers of every person in the phone book.
+A: O(n)
+1.6 You want to read the numbers of just the As.
+A: O(n/26) =&gt; should reduce to just O(n) as we always simplify</p>
+<h1 id="binary-search-in-detail" class="section-header"><a href="#binary-search-in-detail">Binary Search in Detail</a></h1>
+<p>As a simple example, let's first look at how we might describe the algorithm in pseudo-code:</p>
+<pre><code class="language-text">Given a sorted list and an item,
+if the item is in the list - return the item.
+
+Initially, we define a low value of 0 and a high value equal to the list's length minus 1.
+
+Then, `while` we haven't found the element `(low &lt; high)`,
+we check the middle element &quot;our guess&quot; `((low + high) / 2)` against the following:
+
+- If the guess is equal to the item, return the item.
+- If the guess is not equal to the item:
+      If the guess is greater than the item, reset the high so that `high = mid - 1`.
+      If the guess is less than the item, reset the low so that `low = mid + 1`.
+</code></pre>
+</div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.iterative_binary_search.html" title="grokking_algos::intro_to_algos::iterative_binary_search fn">iterative_binary_search</a></td><td class="docblock-short"><p>An iterative binary search</p>
+</td></tr><tr class="module-item"><td><a class="fn" href="fn.linear_search.html" title="grokking_algos::intro_to_algos::linear_search fn">linear_search</a></td><td class="docblock-short"><p>A linear search</p>
+</td></tr><tr class="module-item"><td><a class="fn" href="fn.recursive_binary_search.html" title="grokking_algos::intro_to_algos::recursive_binary_search fn">recursive_binary_search</a></td><td class="docblock-short"><p>A recursive binary search</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="grokking_algos"></div>
+    <script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

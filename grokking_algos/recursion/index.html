@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `recursion` mod in crate `grokking_algos`."><meta name="keywords" content="rust, rustlang, rust-lang, recursion"><title>grokking_algos::recursion - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../grokking_algos/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><p class="location">Module recursion</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../index.html">grokking_algos</a></p><div id="sidebar-vars" data-name="recursion" data-ty="mod" data-relpath="../"></div><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">grokking_algos</a>::<wbr><a class="mod" href="">recursion</a></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/grokking_algos/recursion/mod.rs.html#1-291" title="goto source code">[src]</a></span></h1><div class="docblock"><p>Recursion</p>
+<p><code>recursion</code> is a module that introduces the high-level mechanics of the powerful and
+elegant problem solving method we call recursion - in essence, a method of arriving to a result
+by way of reducing a problem into smaller problems of the same general form.</p>
+<h1 id="context" class="section-header"><a href="#context">Context</a></h1>
+<p>We sometimes hear about recursion and recoil - imagining it is too hard, too abstract, or
+too slow. There are reasons to put consider each of these critiques, but there are as many
+reasons to dispel them.</p>
+<p>For now, let's talk about recursion as a concept rather than the implementation (as with any
+technique, application and implementation is everything if using it successfully!). Should
+the question of proper usage of recursion or its merits be on the table - one only
+has to ask, and I'll extol the benefits!</p>
+<h1 id="mechanics" class="section-header"><a href="#mechanics">Mechanics</a></h1>
+<p>Before we look at code or even pseudocode - let's identify the parts of recursion:</p>
+<ul>
+<li>A base case</li>
+<li>A winding step</li>
+<li>An unwinding step</li>
+</ul>
+<h2 id="the-base-case" class="section-header"><a href="#the-base-case">The Base Case</a></h2>
+<p>The point at which the function must return, and the calling of itself is ceased. This is
+typically the first part of your recursive procedure.</p>
+<h2 id="the-winding-step" class="section-header"><a href="#the-winding-step">The Winding Step</a></h2>
+<p>The point at which the recursive function is first called, ending with the entry into the
+base case. The winding step involves no return statements, and so we traverse further into
+the call stack, again and again - wound up like a ready to uncoil itself.</p>
+<h2 id="the-unwinding-step" class="section-header"><a href="#the-unwinding-step">The Unwinding Step</a></h2>
+<p>Usually this occurs just after the winding - it begins when the base case is hit, and
+it ends when the very first call to the procedure finally returns.</p>
+<p>We'll illustrate these steps further below in psuedocode.</p>
+<h1 id="the-why-of-recursion" class="section-header"><a href="#the-why-of-recursion">The Why of Recursion</a></h1>
+<p>So, why would one even want to use recursion over the iterative solution to a problem?</p>
+<p>For some problems, the recursive solution is the natural one precisely because the problem is
+naturally recursive. Evaluating the factorial of a value is a classic computer science
+favorite for demonstration - though there are others, of course. Finding palindromes, the
+greatest common divisor or evaluating the Fibonacci sequence, Ackermann's function, or
+Pascal's triangle are still but a few.</p>
+<p>Likewise, many data structures (and structures in the natural world) have recursive
+properties - including, trees, graphs, and even the as-ever-useful list. Working
+against them one may find they yield solutions most elegantly expressed recursively.</p>
+<p>Familiar to almost anyone surely reading this - the filesystems on our computers and
+portable devices is also an example of a recursive data structure!</p>
+<p>Recursion can also be the correct approach to solve a problem in order to take advantage of
+immutability. In fact, this close relationship with immutable data and recursion is central
+to the paradigm of functional programming, with both of these fundamental qualities lending
+to programs that can be far easier to reason about compared to their imperative counterparts.
+Evidence suggests that recursion is often less error-prone and often of smaller code-size -
+these benefits extend generally to the languages that rely on it, as well, including
+GHC Haskell, Clojure, Scala, Scheme, F#, Agda, etc.</p>
+<p>The downside to the usage of recursion is most often in its space requirements. As the recursive
+calls are stacked one atop the other, memory is used; and, as memory is consumed, once there
+is no further room for allocation we might have exhausted resources before arriving to
+our solution.</p>
+<h1 id="recursion-in-detail" class="section-header"><a href="#recursion-in-detail">Recursion In Detail</a></h1>
+<p>Let's look at an example now
+The pseudocode might look like:</p>
+<pre><code class="language-text">my_recursive_procedure(my_arg):
+    // This is the winding phase
+    do_something_here_with(my_arg)
+
+    // This is our base case
+    if (length(my_arg) == 0):
+        return a_value;
+
+    // This is the recursive call + the start of the unwinding step
+    my_recursive_procedure(my_arg_but_altered_to_ensure_we_will_converge_toward_base_case)
+</code></pre>
+<h2 id="exercises" class="section-header"><a href="#exercises">Exercises</a></h2>
+<p>3.1</p>
+<p>Suppose we have call stack that looks like:</p>
+<pre><code class="language-text">| ----------- | ----------- |
+|          Greet 2          |
+| ----------- | ----------- |
+| Name:       |   Winston   |
+| ----------- | ----------- |
+|           Greet           |
+| ----------- | ----------- |
+| Name:       |   Winston   |
+| ----------- | ----------- |
+</code></pre>
+<p>What can say about the current state of the call stack?</p>
+<p>A - 3.1</p>
+<p>We can determine that there are two functions on the stack: <code>Greet</code> and <code>Greet 2</code>.
+Each takes at least a single parameter (<code>name</code>) having a value of <code>Winston</code>.
+Both functions being on the stack would indicate that we in the middle of the
+stack evaluation. Once <code>Greet 2</code> is called, we can expect that <code>Greet</code> will resume
+its execution.</p>
+<hr />
+<p>3.2</p>
+<p>Suppose you accidentally write a recursive function that runs forever. As you
+saw, your computer allocates memory on the stack for each function call.
+What happens to the stack when your recursive function runs forever?</p>
+<p>A - 3.2</p>
+<p>Because the stack is a limited resource - we are going to be headed toward a stack overflow!
+This is absolutely not a good error to encounter - in fact, we often classify it as a
+fatal error. Once we detect a stack overflow error, we cannot guarantee the integrity
+of the program state and more often than not, our program has likely crashed completely.</p>
+</div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.factorial.html" title="grokking_algos::recursion::factorial fn">factorial</a></td><td class="docblock-short"><p>A factorial implementation</p>
+</td></tr><tr class="module-item"><td><a class="fn" href="fn.greeter.html" title="grokking_algos::recursion::greeter fn">greeter</a></td><td class="docblock-short"><p>A greeter</p>
+</td></tr><tr class="module-item"><td><a class="fn" href="fn.simple_recursive_countdown.html" title="grokking_algos::recursion::simple_recursive_countdown fn">simple_recursive_countdown</a></td><td class="docblock-short"><p>A simple recursive countdown</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="grokking_algos"></div>
+    <script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

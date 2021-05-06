@@ -1,0 +1,190 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `selection_sort` mod in crate `grokking_algos`."><meta name="keywords" content="rust, rustlang, rust-lang, selection_sort"><title>grokking_algos::selection_sort - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../grokking_algos/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><p class="location">Module selection_sort</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../index.html">grokking_algos</a></p><div id="sidebar-vars" data-name="selection_sort" data-ty="mod" data-relpath="../"></div><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">grokking_algos</a>::<wbr><a class="mod" href="">selection_sort</a></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/grokking_algos/selection_sort/mod.rs.html#1-325" title="goto source code">[src]</a></span></h1><div class="docblock"><p>Selection Sort</p>
+<p><code>selection_sort</code> is a module introducing memory management, the
+structural architecture of arrays + linked lists, and demonstrating
+a basic selection sort algorithm.</p>
+<h1 id="memory" class="section-header"><a href="#memory">Memory</a></h1>
+<p>Developing a mental model of memory management begins with grounding
+our understanding of computer memory as a collection of bytes
+associated with integer addresses.</p>
+<p>Programs can both retrieve and store content to the byte at a given address.
+An address is also commonly known as a pointer - so named because a pointer
+references or points to a specific byte position in memory.</p>
+<p>The content stored by a program or the operation system to random-access
+memory (RAM) can include:</p>
+<ul>
+<li>program bytecode queued for execution</li>
+<li>data values and data structures used by the program</li>
+<li>runtime systems/runtime environments</li>
+</ul>
+<p>It's worth asking - <em>what is a byte anyway?</em> Put plainly, a single byte is
+comprised of eight (8) bits. Our common data types can be (<code>int</code>, <code>float</code>,
+<code>long</code>, <code>char</code>, etc.) expressed in terms of a count of either bits or bytes.</p>
+<p>As an example, we might sometimes say an <code>int</code> is 32 bits, and so can also
+express an <code>int</code> as occupying four (4) bytes. When programs request blocks
+of memory by address, they often do so using the first byte in the block.
+So, even though an <code>int</code> may be located at bytes 10-13, its address would be 10.</p>
+<h2 id="areas-of-memory" class="section-header"><a href="#areas-of-memory">Areas of Memory</a></h2>
+<p>We've briefly covered the core building blocks of memory - the bit and the byte -
+but as we continue to expand our concept of the memory model the abstractions
+expand, as well.</p>
+<p>Most notably, data being stored to memory apart from bytecode, tends to
+be stored in one of two commonly identified partitions: the stack and the heap.</p>
+<h3 id="stack" class="section-header"><a href="#stack">Stack</a></h3>
+<p>The stack is characterized by:</p>
+<ul>
+<li>fast access lookup</li>
+<li>data is removed via &quot;last-in first-out (LIFO)&quot; strategy</li>
+<li>stored data is static and finite in size</li>
+<li>stored data must be known at compile-time</li>
+<li>leverages stack frames</li>
+<li>stacks can be allocated per thread for multi-threaded applications</li>
+<li>data stored includes local variables, pointers, and function frames</li>
+<li>some values can only be stored on heap due to the size constraints</li>
+<li>origin of stack overflow errors</li>
+</ul>
+<h3 id="heap" class="section-header"><a href="#heap">Heap</a></h3>
+<p>The heap is characterized by:</p>
+<ul>
+<li>slow access lookup</li>
+<li>uses pointers as mechanism for lookup</li>
+<li>data with dynamic sizing can be stored</li>
+<li>shared access to data across threads</li>
+<li>because it is dynamic, often more complex to manage and source of pointer bugs</li>
+<li>data stored includes global variables, reference types like strings, maps, and objects</li>
+<li>origin of out of memory errors</li>
+</ul>
+<h2 id="memory-management" class="section-header"><a href="#memory-management">Memory Management</a></h2>
+<p>Programming languages also introduce their own layer of abstraction to the memory model by
+way of their memory management strategies.</p>
+<p>Those familiar with the hazards and wizardry of C/C++ memory management will already be
+aware of the first of these: manual memory management.</p>
+<p>Modern languages commonly use garbage collection (either mark + sweep (Ruby, JavaScript, JVM)
+or reference counting (PHP, Perl, Python)). In this model, a process periodical
+identifies objects in memory that can be removed.</p>
+<p>A variant of reference counting garbage collection - automatic reference counting - can be
+found in Objective-C, Swift and the Clang compiler.</p>
+<p>Finally, we have &quot;resource acquisition is initialization (RAII)&quot; - in this strategy, used by
+C++, Ada, Rust, memory allocation is driven by an object's lifetime (the span of time between
+its construction and destruction).</p>
+<h3 id="memory-management-in-rust" class="section-header"><a href="#memory-management-in-rust">Memory Management in Rust</a></h3>
+<p>This is a deep subject, and one better covered by the following primary resources:</p>
+<ul>
+<li><a href="https://github.com/rust-lang/book/blob/fc9ca867ea6372fc696e1fb4f1b996dcb51f4954/src/ch04-01-what-is-ownership.md">What Is Ownership?</a></li>
+<li><a href="https://github.com/rust-lang/book/blob/fc9ca867ea6372fc696e1fb4f1b996dcb51f4954/src/ch04-02-references-and-borrowing.md">References and Borrowing</a></li>
+<li><a href="https://hacks.mozilla.org/2019/01/fearless-security-memory-safety/">Fearless Security: Memory Safety</a></li>
+</ul>
+<h1 id="data-structures-arrays--linked-lists" class="section-header"><a href="#data-structures-arrays--linked-lists">Data Structures: Arrays + Linked Lists</a></h1>
+<p>Two of the most common data structures used for storing items in memory are arrays and lists.</p>
+<p>Sharing many similarities, they differ in that arrays store their data in contiguous blocks,
+whereas linked lists are a collection of address blocks where each item stores a reference to
+the address of the previous item in the list.</p>
+<p>The performance characteristics (and tradeoffs) between them are typically described in terms
+of the relative ease with which each handles appending new items or removing existing items.
+Linked lists excel when handling inserts over reads while arrays excel at random reads
+but fall short for inserts due to the need to reallocate memory. Deletion behavior
+follows insertion trends - with lists outperforming arrays in the matter, as deletion
+prompts remaining elements in an array to be moved.</p>
+<p>In short, we can summarize the performance characteristics between arrays + lists
+in general terms as follows:</p>
+<table><thead><tr><th>Operation</th><th>Arrays</th><th>Lists</th></tr></thead><tbody>
+<tr><td>Read</td><td>O(1)</td><td>O(n)</td></tr>
+<tr><td>Insert</td><td>O(n)</td><td>O(1)</td></tr>
+<tr><td>Deletion</td><td>O(n)</td><td>O(1)</td></tr>
+</tbody></table>
+<p>Typically, arrays see more usage because of their fast constant time random access reads.
+Linked lists can only provide sequential access, resulting in a request for lookup of the
+element located at the <code>n</code> position of linked list requiring a read of all prior elements
+before <code>n</code>.</p>
+<h2 id="exercises" class="section-header"><a href="#exercises">Exercises</a></h2>
+<p>2.1</p>
+<p>Suppose you're building an app to keep track of your finances. Every day, you write
+down everything you spent money on. At the end of the month, you review your expenses
+and sum up how much you spent. So, you have lots of inserts and a few reads. Should
+you use an array or a list?</p>
+<p>A - 2.1</p>
+<p>If we have more inserts than reads, we would be wise to leverage lists. We are
+in luck for the read requirement as well - our problem statement involves a summing
+operation which we could deem sequential reads (as opposed to &quot;random access&quot; reads).
+Sequential reads for linked lists can be quite performant, so a linked lists
+would be an appropriate structure.</p>
+<hr />
+<p>2.2</p>
+<p>Suppose you're building an app for restaurants to take customer orders. Your app needs
+to store a list of orders. Servers keep adding orders to this list, and chefs take orders
+off the list and make them. It's an order queue: servers add orders to the back of the
+queue, and the chef takes the first order off the queue and cooks it. Would you use an
+array or a linked list to implement this queue?</p>
+<p>A - 2.2</p>
+<p>Again, a linked list here is ideal - there's no random access reads necessary, as we're
+dealing with a simple &quot;first in first-out (FIFO)&quot; lookup strategy. These insertion
+and deletion actions on the queue favor the constant time characteristics provided
+by a linked list's innate tendency to track its first and last elements.</p>
+<hr />
+<p>2.3</p>
+<p>Suppose Facebook keeps a list of usernames. When someone tries to log in to Facebook,
+a search is done for their username. If their name is in the list of usernames,
+they can log in. People log in to Facebook pretty often, so there are a lot of searches
+through this list of usernames. Suppose Facebook uses binary search to search the list.
+Binary search needs random access - you need to be able to get to the middle of the list
+of usernames instantly. Knowing this, would you implement the list as an array or a linked
+list?</p>
+<p>A - 2.3</p>
+<p><em>you need to be able to get to the middle of the list of usernames instantly</em> is our
+cue that we need an array - preferably sorted, as our binary search algorithm
+requires it!</p>
+<hr />
+<p>2.4</p>
+<p>People sign up for Facebook pretty often, too. Suppose you decided to use an array to
+store the list of users. What are the downsides of an array for inserts? In particular,
+suppose you're using binary search to search for logins. What happens when you add new
+users to an array?</p>
+<p>A - 2.4</p>
+<p>The biggest downside is the potential for memory reallocation. This could incur
+a performance overhead in and of itself, but should we have exhausted available space
+in memory, we might even risk out of memory errors. This is to say nothing of
+the need to insure the inserted element is then sorted into its proper position.</p>
+<hr />
+<p>2.5</p>
+<p>In reality, Facebook uses neither an array nor a linked list to store user information.
+Let's consider a hybrid data structure: an array of linked lists. You have an array with
+26 slots. Each slot points to a linked list. For example, the first slot in the array
+points to a linked list containing all the usernames starting with <code>a</code>. The second slot
+points to a linked list containing all the usernames starting with <code>b</code>, and so on.</p>
+<p>Suppose Adit B signs up for Facebook, and you want to add them to the list. You go to
+slot 1 in the array, go to the linked list for slot 1, and add Adit B at the end. Now,
+suppose you want to search for Zakhir H. You go to slot 26, which points to a linked list
+of all the Z names. Then you search through that list to find Zakhir H.</p>
+<p>Compare this hybrid data structure to arrays and linked lists. Is it slower or faster
+than each for searching and inserting? You don't have to give Big O run times,
+just whether the new data structure would be faster or slower.</p>
+<p>A - 2.5</p>
+<p>Our hybrid data structure strikes a balance between arrays + linked lists. Arrays
+provide excellent reads over linked lists - so our hybrid structure accelerates
+the initial lookup penalty we'd otherwise expect from a linked list or a list
+of linked lists. Our hybrid data structure also gains the efficiency of
+insertion/deletion as well - a penalty we would have incurred with an array of arrays.</p>
+<h1 id="selection-sort" class="section-header"><a href="#selection-sort">Selection Sort</a></h1>
+<p>We have previously looked at binary search, but we now turn our attention to our first sorting
+algorithm: <em>selection sort</em>. This novel algorithm is an entry point to a large number of
+sorting algorithms, including quicksort and others.</p>
+<p>Do note that if you are after an efficient sorting algorithm, look elsewhere first!</p>
+<h1 id="selection-sort-in-detail" class="section-header"><a href="#selection-sort-in-detail">Selection Sort in Detail</a></h1>
+<p>Let's imagine we are tasked with sorting a list of unordered integers - for this simple
+example, let's first look at how we might describe the algorithm in pseudo-code.</p>
+<pre><code class="language-text">Given a list of unordered elements, find the smallest element, placing it at the head
+of the list. Proceed to find the next min value ahead of just recently placed element.
+Repeat this process until the list has been sorted smallest to largest.
+</code></pre>
+<p>How would we describe the performance characteristics of this algorithm?
+We can immediately spot that asking for the min of a list would require us to visit
+each element in the list once, meaning we can deduce this operation takes <code>O(n)</code> time.
+For a list of size <code>n</code>, we repeat the search for min (i.e., we could also use max or any
+another predicate comparator depending on the nature of the sort logic) <code>n</code> times.
+In short, we perform <code>O(n)</code> <code>n</code> times - in other words <code>O(n * n)</code> or O(n<sup>2</sup>).</p>
+</div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.selection_sort.html" title="grokking_algos::selection_sort::selection_sort fn">selection_sort</a></td><td class="docblock-short"><p>A selection sort</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="grokking_algos"></div>
+    <script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

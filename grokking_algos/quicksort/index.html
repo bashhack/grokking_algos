@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `quicksort` mod in crate `grokking_algos`."><meta name="keywords" content="rust, rustlang, rust-lang, quicksort"><title>grokking_algos::quicksort - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../grokking_algos/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><p class="location">Module quicksort</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../index.html">grokking_algos</a></p><div id="sidebar-vars" data-name="quicksort" data-ty="mod" data-relpath="../"></div><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">grokking_algos</a>::<wbr><a class="mod" href="">quicksort</a></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/grokking_algos/quicksort/mod.rs.html#1-475" title="goto source code">[src]</a></span></h1><div class="docblock"><p>Quicksort</p>
+<p><code>quicksort</code> is a module that introduces not only the simple and elegant sorting algorithm
+we call 'Quicksort' but also the general classification of algorithmic technique it belongs
+to, known as 'divide and conquer'.</p>
+<h1 id="context" class="section-header"><a href="#context">Context</a></h1>
+<p>Building from the foundation of problem solving covered in the <code>recursion</code> module, the
+mechanics of divide and conquer is a method of breaking down complex problems into
+smaller, simpler ones.</p>
+<p>Put simply - divide and conquer algorithms are recursive by their very nature!</p>
+<p>We can describe the application of divide and conquer as follows:</p>
+<ul>
+<li>Identify the base case</li>
+<li>Divide or simplify the problem until it becomes the base case</li>
+</ul>
+<h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
+<p>Let's rework a simple sum function to illustrate the principle.
+We can describe the probelm as such:</p>
+<pre><code class="language-text">A function `sum` takes an array,
+storing a reference to a sum total.
+For every item in the array,
+we increase the count of the sum total,
+returning total after iteration is complete.
+</code></pre>
+<p>In this, the iterative case, we can envision a <code>for</code> loop mechanic underpinning the
+approach. However, in the recursive case we must apply those rules of divide and conquer
+in order to arrive at the appropriate refactoring.</p>
+<pre><code class="language-text">A function `sum` takes an array,
+if that array is empty return a sum total of zero.
+If that array is not empty, the sum total is equal
+to the first value in the array plus the sum of the rest of the array.
+</code></pre>
+<h2 id="continued-exercises" class="section-header"><a href="#continued-exercises">Continued Exercises</a></h2>
+<p>4.1</p>
+<p>Write out the code for the <code>sum</code> function</p>
+<p>A - 4.1</p>
+<p>Hello world</p>
+<hr />
+<p>4.2</p>
+<p>Write a recursive function to count the number of items in a list</p>
+<p>A - 4.2</p>
+<p>Hello world 2</p>
+<hr />
+<p>4.3</p>
+<p>Find the maximum number in a list</p>
+<p>A - 4.3</p>
+<p>Hello world 3</p>
+<hr />
+<p>4.4</p>
+<p>Remembering binary search - it's a divide and conquer algorithm, too. Can
+you come up with the base case and recursive case for binary search?</p>
+<p>A - 4.4</p>
+<p>See: <a href="../intro_to_algos/fn.recursive_binary_search.html">recursive_binary_search</a></p>
+<h1 id="intro-to-quicksort" class="section-header"><a href="#intro-to-quicksort">Intro to Quicksort</a></h1>
+<p>Like <a href="../selection_sort/fn.selection-sort.html">selection_sort</a> before it,
+Quicksort is common and simple sorting algorithm. Its advantage over the former
+is in its speed - it is a faster algorithm than selection, having an expected
+runtime performance of <code>O(n log n)</code>. In fitting with the theme of this module,
+it is also a divide and conquer algorithm.</p>
+<h1 id="quicksort-in-detail" class="section-header"><a href="#quicksort-in-detail">Quicksort in Detail</a></h1>
+<pre><code class="language-text">Given an array of elements, while there are elements, iterate over the elements.
+If there is a value at the moment of iteration, let this the pivot element.
+Partition the array of elements, into two sub-arrays
+(elements less than the pivot and elements greater than the pivot, respectively).
+Then, call Quicksort recursively on each of the two sub-arrays.
+Finally, combined the sorted sub-arrays on either side of the pivot element and return.
+</code></pre>
+<h2 id="perils-of-the-pivot" class="section-header"><a href="#perils-of-the-pivot">Perils of the Pivot</a></h2>
+<p>We have described Quicksort as an algorithm that can be expected to have the
+performance characteristics of <code>O(n log n)</code> - but, crucially, this is only in the
+average case. Selection sort, as we saw previously, had a Big O of <code>O(n * n)</code>.
+As it happens this is also the worst case performance for Quicksort, as well.</p>
+<p>Interestingly, Quicksort's neighboring sort algorithm: merge sort is actually consistenly
+<code>O(n log n)</code>. The question then is why not just use merge sort over Quicksort
+all the time?</p>
+<p>The answer lies in the value of the Big O constant values between them. Merge sort
+has a larger constant value than quicksort, making it slower in practice than Quicksort.
+Additionally, quicksort is generally faster than merge sort in practice because
+it will tend to perform in the average case more often than the worst case.</p>
+<p>But what consitutes the worst case, anyway? The pivot element in Quicksort bears
+heavy impact on its performance. Thankfully the worst-case is not as frequently
+encountered in practice, but let's imagine that we have picked the first element
+in the list as our pivot element (on a related note, most implementations of the
+algorithm choose either the first or last). Now, let's also imagine we have a sorted
+list. Because the Quicksort algorithm eagerly begins its execution without checking
+if the list is sorted, we will still attempt to sort the sorted list.</p>
+<p>When this occurs, we will have a longer call stack compared to a middle-point pivot
+against that same sorted list:</p>
+<pre><code class="language-text">[1] [2] [3] [4] [5] [6] [7] [8]
+
+// NOTE: We pick the first element as the pivot every time
+[ ] &lt;1&gt; [2] [3] [4] [5] [6] [7] [8]
+        [ ] &lt;2&gt; [3] [4] [5] [6] [7] [8]
+            [ ] &lt;3&gt; [4] [5] [6] [7] [8]
+                [ ] &lt;4&gt; [5] [6] [7] [8]
+                    [ ] &lt;5&gt; [6] [7] [8]
+                        [ ] &lt;6&gt; [7] [8]
+                            [ ] [7] [8]
+</code></pre>
+<p>Compare this with a middle-point pivot against that same sorted list:</p>
+<pre><code class="language-text">[1] [2] [3] [4] [5] [6] [7] [8]
+
+[1] [2] [3] &lt;4&gt; [5] [6] [7] [8]
+[1] &lt;2&gt; [3]         &lt;6&gt; [7] [8]
+                    [ ] &lt;7&gt; [8]
+</code></pre>
+<p>In the first case, we have the worst case runtime and in the second we have
+the best-case. In other words, the stack size of the first is <code>O(n)</code> and the second is <code>O(log n)</code>.
+For both, the time at each level is <code>O(n)</code>. Extrapolating this stack size by level time,
+we have Big O of <code>O(n * n)</code> and <code>O(n log n)</code>, respectively.</p>
+<h2 id="exercises" class="section-header"><a href="#exercises">Exercises</a></h2>
+<p>4.5</p>
+<p>Printing the value of each element in an array.</p>
+<p>A - 4.5</p>
+<p><code>O(n)</code></p>
+<hr />
+<p>4.6</p>
+<p>Doubling the value of each element in an array.</p>
+<p>A - 4.6</p>
+<p>Also, <code>O(n)</code>.</p>
+<hr />
+<p>4.7</p>
+<p>Doubling the value of just the first element in an array.</p>
+<p>A - 4.7</p>
+<p><code>O(1)</code></p>
+<hr />
+<p>4.8</p>
+<p>Creating a multiplication table with all the elements in the array. So if your array is [2, 3, 7, 8, 10],
+you first multiply every element by 2, then multiply every element by 3, then by 7, and so on.</p>
+<p>A - 4.8</p>
+<p><code>O(n * n)</code> or O(n<sup>2</sup>)</p>
+</div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn._find_max.html" title="grokking_algos::quicksort::_find_max fn">_find_max</a></td><td class="docblock-short"><p>A max implementation</p>
+</td></tr><tr class="module-item"><td><a class="fn" href="fn.count.html" title="grokking_algos::quicksort::count fn">count</a></td><td class="docblock-short"><p>A count implementation</p>
+</td></tr><tr class="module-item"><td><a class="fn" href="fn.find_max.html" title="grokking_algos::quicksort::find_max fn">find_max</a></td><td class="docblock-short"><p>A function wrapper for <a href="../quicksort/fn._find_max.html">_find_max</a></p>
+</td></tr><tr class="module-item"><td><a class="fn" href="fn.quick_sort.html" title="grokking_algos::quicksort::quick_sort fn">quick_sort</a></td><td class="docblock-short"><p>A quicksort implementation</p>
+</td></tr><tr class="module-item"><td><a class="fn" href="fn.sum.html" title="grokking_algos::quicksort::sum fn">sum</a></td><td class="docblock-short"><p>A sum implementation</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="grokking_algos"></div>
+    <script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

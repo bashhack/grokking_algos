@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["factorial","A factorial implementation"],["greeter","A greeter"],["simple_recursive_countdown","A simple recursive countdown"]]});

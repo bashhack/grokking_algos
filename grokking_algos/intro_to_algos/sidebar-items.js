@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["iterative_binary_search","An iterative binary search"],["linear_search","A linear search"],["recursive_binary_search","A recursive binary search"]]});
